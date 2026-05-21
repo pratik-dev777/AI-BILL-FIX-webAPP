@@ -1,6 +1,6 @@
 # Architecture
 
-## Phase 1 Snapshot
+## Phase 1 
 
 AICostLens currently contains a Next.js App Router frontend shell.
 
