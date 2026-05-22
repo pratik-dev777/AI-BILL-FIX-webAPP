@@ -1,6 +1,6 @@
 # Prompts
 
-## Phase 1
+## Phase 2
 
 No AI summary prompt exists yet.
 

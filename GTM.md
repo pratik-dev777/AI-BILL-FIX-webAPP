@@ -2,7 +2,7 @@
 
 ## Positioning
 
-AICostLens helps startup teams identify wasted AI subscription and API spending before costs quietly become recurring burn.
+AIBillFIX helps startup teams identify wasted AI subscription and API spending before costs quietly become recurring burn.
 
 ## Audience
 
@@ -11,7 +11,6 @@ AICostLens helps startup teams identify wasted AI subscription and API spending 
 - Engineering managers
 - Finance-conscious team leads
 
-## Phase 1 TODO
+## Phase 2 Note
 
-- Refine landing copy after the core audit flow exists.
-- Add real conversion paths after lead capture is implemented.
+The deterministic audit engine creates the first real product proof: AIBillFIX can now turn tool inputs into explainable savings recommendations.

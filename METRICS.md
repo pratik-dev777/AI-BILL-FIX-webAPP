@@ -1,6 +1,6 @@
 # Metrics
 
-## Phase 1
+## Phase 2
 
 No analytics are implemented yet.
 

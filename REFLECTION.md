@@ -1,9 +1,12 @@
 # Reflection
 
-## Phase 1
+## Phase 2
 
-The first phase focuses on project setup rather than business logic. The main decision was to keep the landing page honest: it introduces AICostLens, but clearly marks the audit numbers as preview content until the deterministic engine exists.
+The audit engine uses deterministic rules instead of AI-generated math. This is important because savings numbers should be explainable in an interview and trustworthy to a user.
+
+The main tradeoff is that pricing changes over time. To keep the app honest, all MVP pricing assumptions live in `src/lib/pricing.ts` and are documented in `PRICING_DATA.md`.
 
 ## TODO
 
-- Add deeper reflection after user testing, implementation tradeoffs, and final deployment work.
+- Revisit pricing assumptions before final deployment.
+- Tune savings rates after real user feedback.

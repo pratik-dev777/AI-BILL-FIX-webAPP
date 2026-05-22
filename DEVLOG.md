@@ -1,12 +1,14 @@
 # Devlog
 
-## 2026-05-21 - Phase 1
+## 2026-05-22 - Phase 2
 
-- Created the Next.js App Router project with TypeScript, Tailwind CSS, and ESLint.
-- Replaced the default starter page with an AICostLens landing page.
-- Added required root documentation files as placeholders so the repository structure matches the assignment.
-- Kept future features documented as planned work instead of pretending they are complete.
+- Renamed the app from AICostLens to AIBillFIX.
+- Restored the required project structure in the current workspace.
+- Added `src/lib/pricing.ts` as the single source for supported AI tools, plans, and MVP pricing assumptions.
+- Added Zod schemas to validate and normalize audit input.
+- Built a deterministic audit engine for unused seats, plan downgrades, overlapping tools, high API spend, retail credit review, and efficient-stack messaging.
+- Added Vitest tests for the required audit engine cases.
 
 ## Next
 
-- Phase 2: pricing data model, deterministic audit engine, and Vitest coverage.
+- Phase 3: spend input form, localStorage persistence, and results UI.
