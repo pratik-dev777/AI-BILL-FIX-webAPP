@@ -46,7 +46,7 @@ export default function Home() {
           </section>
 
           <section
-            aria-label="AICostLens audit preview"
+            aria-label="AIBillFIX audit preview"
             className="grid gap-4 rounded-lg border border-[#d8dfd2] bg-white p-5 shadow-[0_20px_70px_rgba(23,33,28,0.08)]"
           >
             <div className="flex items-center justify-between border-b border-[#e4eadf] pb-4">
@@ -87,9 +87,9 @@ export default function Home() {
             </div>
 
             <p className="rounded-md bg-[#f8faf6] p-4 text-sm leading-6 text-[#4b5c51]">
-              Phase 1 sets up the product shell. Real audit math, validated
-              pricing data, storage, email, and share links will arrive in later
-              phases.
+              Phase 2 adds the deterministic audit engine and validated pricing
+              model. The spend form, storage, email, and share links will arrive
+              in later phases.
             </p>
           </section>
         </div>
@@ -114,8 +114,8 @@ export default function Home() {
           <div id="assessment-status">
             <h2 className="text-base font-semibold">Current phase</h2>
             <p className="mt-2 text-sm leading-6 text-[#64766b]">
-              Setup, repo structure, landing page, and documentation
-              placeholders.
+              Pricing data model, deterministic audit engine, and automated
+              tests.
             </p>
           </div>
         </section>

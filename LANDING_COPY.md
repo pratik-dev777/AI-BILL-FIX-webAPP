@@ -8,7 +8,7 @@ Headline:
 
 Supporting copy:
 
-> AICostLens turns AI subscriptions, seats, direct API usage, and team size into a clear savings estimate with practical recommendations.
+> AIBillFIX turns AI subscriptions, seats, direct API usage, and team size into a clear savings estimate with practical recommendations.
 
 ## CTA Copy
 
