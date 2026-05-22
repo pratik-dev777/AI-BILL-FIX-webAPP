@@ -1,29 +1,31 @@
 # Architecture
 
-## Phase 1 Snapshot
+## Phase 2 Snapshot
 
-AICostLens currently contains a Next.js App Router frontend shell.
+AIBillFIX currently contains:
 
-## Planned System
+- A Next.js App Router frontend shell.
+- A documented pricing data module.
+- A deterministic audit engine.
+- Automated tests for the audit engine.
 
-- `src/app`: routes, pages, metadata, and server actions or route handlers.
-- `src/components`: reusable UI components.
-- `src/lib/pricing.ts`: documented pricing constants.
-- `src/lib/audit`: deterministic audit engine.
-- `src/lib/ai`: replaceable AI summary provider.
-- `src/lib/supabase`: database client helpers.
-- `src/lib/email`: Resend email helpers.
+## Current Code Structure
 
-## Data Flow Planned
+- `src/app`: homepage and app layout.
+- `src/lib/pricing.ts`: supported tools, plans, pricing assumptions, and pricing helpers.
+- `src/lib/audit/types.ts`: Zod schemas and TypeScript types for audit input/output.
+- `src/lib/audit/engine.ts`: deterministic savings rules.
+- `src/lib/audit/engine.test.ts`: Vitest tests for the audit engine.
+
+## Planned Data Flow
 
 1. User enters AI tools and team details.
-2. Zod validates input.
+2. Zod validates and normalizes input.
 3. Deterministic audit engine calculates savings.
 4. Results page shows savings and recommendations.
 5. Optional lead capture saves contact data.
 6. Backend creates public shareable audit URL with private fields removed.
 
-## Phase 1 TODO
+## Phase 2 Rule
 
-- Add real pricing model in Phase 2.
-- Add audit routes and persistence in later phases.
+The audit engine does not use AI to calculate savings. AI summaries in a later phase may explain results, but the numbers must come from deterministic code.
