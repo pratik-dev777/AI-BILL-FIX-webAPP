@@ -1,6 +1,6 @@
 # Tests
 
-## Phase 2 Automated Tests
+## Phase 3 Automated Tests
 
 Run:
 
@@ -23,8 +23,14 @@ The audit engine tests cover:
 
 - Run `npm run dev`.
 - Open `http://localhost:3000`.
-- Confirm the landing page says AIBillFIX.
+- Confirm the page says AIBillFIX.
+- Add at least two tools.
+- Change a tool, plan, monthly spend, seats, team size, and primary use case.
+- Refresh the page and confirm the form values remain.
+- Run the audit and confirm results appear.
+- Try a high-savings stack and confirm the Credex CTA appears.
+- Try a low-savings stack and confirm the efficient-stack message appears.
 
 ## Notes
 
-Phase 2 tests focus on business logic only. UI tests are planned after the form and results page exist.
+Phase 3 still uses automated tests for business logic only. Browser/UI tests can be added later if time allows.

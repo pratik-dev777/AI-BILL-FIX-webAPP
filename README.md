@@ -4,16 +4,18 @@ AIBillFIX is a free web app for auditing a startup's AI tool spending. The proje
 
 ## Current Status
 
-Phase 2 is complete:
+Phase 3 is complete:
 
 - Next.js App Router project scaffolded with TypeScript and Tailwind CSS.
-- Initial landing page created.
 - Pricing data model added in `src/lib/pricing.ts`.
 - Deterministic audit engine added in `src/lib/audit/engine.ts`.
 - Vitest coverage added for core audit rules.
+- Interactive spend form added for multiple AI tools.
+- Form draft persists across reloads with `localStorage`.
+- Results UI shows monthly savings, annual savings, current spend, optimized spend, and per-tool recommendations.
 - Required root documentation files added as honest placeholders or working notes.
 
-Later phases will add the spend form, localStorage persistence, backend storage, email, AI summaries, public share pages, CI, and deployment documentation.
+Later phases will add backend storage, lead capture, transactional email, AI summaries, public share pages, CI, and deployment documentation.
 
 ## Tech Stack
 

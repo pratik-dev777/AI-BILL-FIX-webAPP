@@ -1,5 +1,14 @@
 # Devlog
 
+## 2026-05-23 - Phase 3
+
+- Replaced the static preview landing page with an interactive audit workspace.
+- Added a multi-tool spend form with tool, plan, monthly spend, seats, team size, and primary use case fields.
+- Connected the form to the deterministic audit engine from Phase 2.
+- Added `localStorage` persistence so draft form state survives page reloads.
+- Added a results panel with monthly savings, annual savings, current spend, optimized spend, per-tool recommendations, Credex CTA logic, and efficient-stack messaging.
+- Kept backend lead capture, email, AI summaries, and share URLs out of Phase 3 so they can be implemented honestly in later phases.
+
 ## 2026-05-22 - Phase 2
 
 - Renamed the app from AICostLens to AIBillFIX.
@@ -11,4 +20,4 @@
 
 ## Next
 
-- Phase 3: spend input form, localStorage persistence, and results UI.
+- Phase 4: Supabase backend, save audit, lead capture, Resend email, and abuse protection.

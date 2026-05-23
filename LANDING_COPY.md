@@ -1,21 +1,22 @@
 # Landing Copy
 
-## Current Landing Page
+## Current First Screen
 
 Headline:
 
-> See where your startup is overspending on AI tools.
+> Find waste in your AI stack before it becomes monthly burn.
 
 Supporting copy:
 
-> AIBillFIX turns AI subscriptions, seats, direct API usage, and team size into a clear savings estimate with practical recommendations.
+> Enter your tools, plans, monthly spend, seats, team size, and main use case. AIBillFIX uses deterministic rules to estimate practical savings.
 
 ## CTA Copy
 
-- View build status
-- See MVP scope
+- Add tool
+- Reset
+- Run audit
 - Talk to Credex
 
 ## TODO
 
-- Revisit the copy after the audit form and results page exist.
+- Revisit the copy after backend lead capture and public share pages exist.
