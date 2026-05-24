@@ -19,6 +19,20 @@ type DraftState = {
   tools: ToolDraft[];
 };
 
+type AuditRecord = {
+  auditId: string | null;
+  publicSlug: string | null;
+  publicUrl: string | null;
+  storageStatus: "saved" | "storage-not-configured" | "local-only";
+};
+
+type LeadStatus =
+  | "idle"
+  | "submitting"
+  | "saved"
+  | "storage-not-configured"
+  | "error";
+
 const STORAGE_KEY = "aibillfix:audit-draft:v1";
 const supportedTools = Array.from(
   new Set(PRICING_PLANS.map((plan) => plan.toolName)),
@@ -42,8 +56,13 @@ const defaultDraft: DraftState = {
 export function AuditWorkspace() {
   const [draft, setDraft] = useState<DraftState>(defaultDraft);
   const [auditResult, setAuditResult] = useState<AuditResult | null>(null);
+  const [auditInput, setAuditInput] = useState<AuditInput | null>(null);
+  const [auditRecord, setAuditRecord] = useState<AuditRecord | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [hasLoadedDraft, setHasLoadedDraft] = useState(false);
+  const [isSavingAudit, setIsSavingAudit] = useState(false);
+  const [leadStatus, setLeadStatus] = useState<LeadStatus>("idle");
+  const [leadError, setLeadError] = useState<string | null>(null);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -80,6 +99,10 @@ export function AuditWorkspace() {
 
   function updateTool(toolId: string, update: Partial<ToolDraft>) {
     setAuditResult(null);
+    setAuditInput(null);
+    setAuditRecord(null);
+    setLeadStatus("idle");
+    setLeadError(null);
     setFormError(null);
     setDraft((currentDraft) => ({
       tools: currentDraft.tools.map((tool) => {
@@ -100,6 +123,10 @@ export function AuditWorkspace() {
 
   function addTool() {
     setAuditResult(null);
+    setAuditInput(null);
+    setAuditRecord(null);
+    setLeadStatus("idle");
+    setLeadError(null);
     setFormError(null);
     setDraft((currentDraft) => ({
       tools: [
@@ -114,6 +141,10 @@ export function AuditWorkspace() {
 
   function removeTool(toolId: string) {
     setAuditResult(null);
+    setAuditInput(null);
+    setAuditRecord(null);
+    setLeadStatus("idle");
+    setLeadError(null);
     setFormError(null);
     setDraft((currentDraft) => ({
       tools:
@@ -126,28 +157,121 @@ export function AuditWorkspace() {
   function resetDraft() {
     setDraft(defaultDraft);
     setAuditResult(null);
+    setAuditInput(null);
+    setAuditRecord(null);
+    setLeadStatus("idle");
+    setLeadError(null);
     setFormError(null);
     window.localStorage.removeItem(STORAGE_KEY);
   }
 
-  function runAudit() {
+  async function runAudit() {
     try {
-      const auditInput: AuditInput = {
-        tools: draft.tools.map((tool) => ({
-          toolName: tool.toolName,
-          planName: tool.planName,
-          monthlySpend: parseCurrencyInput(tool.monthlySpend),
-          seats: parseWholeNumberInput(tool.seats),
-          teamSize: parseWholeNumberInput(tool.teamSize),
-          primaryUseCase: tool.primaryUseCase,
-        })),
+      const nextAuditInput = draftToAuditInput(draft);
+      const localResult = auditAiSpend(nextAuditInput);
+
+      setIsSavingAudit(true);
+      setAuditInput(nextAuditInput);
+      setAuditResult(localResult);
+      setAuditRecord(null);
+      setLeadStatus("idle");
+      setLeadError(null);
+      setFormError(null);
+
+      const response = await fetch("/api/audits", {
+        body: JSON.stringify(nextAuditInput),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("The audit was calculated locally, but was not saved.");
+      }
+
+      const savedAudit = (await response.json()) as {
+        auditId: string | null;
+        publicSlug: string | null;
+        publicUrl: string | null;
+        result: AuditResult;
+        storageStatus: AuditRecord["storageStatus"];
       };
 
-      setAuditResult(auditAiSpend(auditInput));
-      setFormError(null);
+      setAuditResult(savedAudit.result);
+      setAuditRecord({
+        auditId: savedAudit.auditId,
+        publicSlug: savedAudit.publicSlug,
+        publicUrl: savedAudit.publicUrl,
+        storageStatus: savedAudit.storageStatus,
+      });
     } catch {
-      setAuditResult(null);
-      setFormError("Check each tool, plan, spend, seats, and team size.");
+      try {
+        const nextAuditInput = draftToAuditInput(draft);
+        setAuditInput(nextAuditInput);
+        setAuditResult(auditAiSpend(nextAuditInput));
+        setAuditRecord({
+          auditId: null,
+          publicSlug: null,
+          publicUrl: null,
+          storageStatus: "local-only",
+        });
+        setFormError("Audit calculated locally, but backend save did not complete.");
+      } catch {
+        setAuditInput(null);
+        setAuditResult(null);
+        setAuditRecord(null);
+        setFormError("Check each tool, plan, spend, seats, and team size.");
+      }
+    } finally {
+      setIsSavingAudit(false);
+    }
+  }
+
+  async function submitLead(input: {
+    companyName: string;
+    email: string;
+    honeypot: string;
+    role: string;
+    teamSize: string;
+  }) {
+    if (!auditInput || !auditResult) {
+      return;
+    }
+
+    setLeadStatus("submitting");
+    setLeadError(null);
+
+    try {
+      const response = await fetch("/api/leads", {
+        body: JSON.stringify({
+          auditId: auditRecord?.auditId ?? null,
+          auditInput,
+          companyName: input.companyName,
+          email: input.email,
+          honeypot: input.honeypot,
+          publicSlug: auditRecord?.publicSlug ?? null,
+          role: input.role,
+          teamSize: input.teamSize ? parseWholeNumberInput(input.teamSize) : null,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Lead capture failed.");
+      }
+
+      const leadResponse = (await response.json()) as {
+        storageStatus: "saved" | "storage-not-configured";
+      };
+
+      setLeadStatus(leadResponse.storageStatus);
+    } catch {
+      setLeadStatus("error");
+      setLeadError("Lead capture could not be completed. Please try again.");
     }
   }
 
@@ -221,16 +345,23 @@ export function AuditWorkspace() {
             </p>
             <button
               className="rounded-md bg-[#176b4d] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#12563d]"
+              disabled={isSavingAudit}
               onClick={runAudit}
               type="button"
             >
-              Run audit
+              {isSavingAudit ? "Running audit..." : "Run audit"}
             </button>
           </div>
         </section>
       </section>
 
-      <ResultsPanel result={auditResult} />
+      <ResultsPanel
+        auditRecord={auditRecord}
+        leadError={leadError}
+        leadStatus={leadStatus}
+        onLeadSubmit={submitLead}
+        result={auditResult}
+      />
     </div>
   );
 }
@@ -374,7 +505,25 @@ function NumberField({
   );
 }
 
-function ResultsPanel({ result }: { result: AuditResult | null }) {
+function ResultsPanel({
+  auditRecord,
+  leadError,
+  leadStatus,
+  onLeadSubmit,
+  result,
+}: {
+  auditRecord: AuditRecord | null;
+  leadError: string | null;
+  leadStatus: LeadStatus;
+  onLeadSubmit: (input: {
+    companyName: string;
+    email: string;
+    honeypot: string;
+    role: string;
+    teamSize: string;
+  }) => Promise<void>;
+  result: AuditResult | null;
+}) {
   if (!result) {
     return (
       <aside className="rounded-lg border border-[#d8dfd2] bg-white p-5 shadow-[0_18px_55px_rgba(23,33,28,0.08)]">
@@ -418,6 +567,8 @@ function ResultsPanel({ result }: { result: AuditResult | null }) {
         />
         <Metric label="Tools audited" value={String(result.tools.length)} />
       </section>
+
+      {auditRecord ? <StorageNotice auditRecord={auditRecord} /> : null}
 
       {result.showCredexCta ? (
         <section className="rounded-lg border border-[#ffcaa8] bg-[#fff3ed] p-4">
@@ -479,7 +630,157 @@ function ResultsPanel({ result }: { result: AuditResult | null }) {
           ))}
         </div>
       </section>
+
+      <LeadCaptureForm
+        leadError={leadError}
+        leadStatus={leadStatus}
+        onSubmit={onLeadSubmit}
+      />
     </aside>
+  );
+}
+
+function StorageNotice({ auditRecord }: { auditRecord: AuditRecord }) {
+  if (auditRecord.storageStatus === "saved") {
+    return (
+      <p className="rounded-lg border border-[#d8dfd2] bg-[#f8faf6] p-3 text-sm text-[#4b5c51]">
+        Audit saved. Public share URL setup continues in Phase 5.
+      </p>
+    );
+  }
+
+  if (auditRecord.storageStatus === "storage-not-configured") {
+    return (
+      <p className="rounded-lg border border-[#ffcaa8] bg-[#fff3ed] p-3 text-sm text-[#6c4b3d]">
+        Audit calculated locally. Add Supabase environment variables to enable
+        backend storage.
+      </p>
+    );
+  }
+
+  return (
+    <p className="rounded-lg border border-[#ffcaa8] bg-[#fff3ed] p-3 text-sm text-[#6c4b3d]">
+      Audit calculated locally. Backend save did not complete.
+    </p>
+  );
+}
+
+function LeadCaptureForm({
+  leadError,
+  leadStatus,
+  onSubmit,
+}: {
+  leadError: string | null;
+  leadStatus: LeadStatus;
+  onSubmit: (input: {
+    companyName: string;
+    email: string;
+    honeypot: string;
+    role: string;
+    teamSize: string;
+  }) => Promise<void>;
+}) {
+  const [email, setEmail] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [role, setRole] = useState("");
+  const [teamSize, setTeamSize] = useState("");
+  const [honeypot, setHoneypot] = useState("");
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await onSubmit({
+      companyName,
+      email,
+      honeypot,
+      role,
+      teamSize,
+    });
+  }
+
+  return (
+    <section className="rounded-lg border border-[#d8dfd2] bg-[#f8faf6] p-4">
+      <h2 className="text-base font-semibold">Email the audit</h2>
+      <p className="mt-2 text-sm leading-6 text-[#64766b]">
+        Lead capture appears only after results. Backend storage and Resend
+        email turn on when environment variables are configured.
+      </p>
+
+      <form className="mt-4 grid gap-3" onSubmit={handleSubmit}>
+        <label className="hidden">
+          Leave this field empty
+          <input
+            autoComplete="off"
+            onChange={(event) => setHoneypot(event.target.value)}
+            tabIndex={-1}
+            value={honeypot}
+          />
+        </label>
+
+        <label className="grid gap-1.5 text-sm font-medium">
+          Email
+          <input
+            className="h-11 rounded-md border border-[#b9c3b1] bg-white px-3 text-sm text-[#17211c] outline-none transition focus:border-[#176b4d] focus:ring-2 focus:ring-[#176b4d]/20"
+            onChange={(event) => setEmail(event.target.value)}
+            required
+            type="email"
+            value={email}
+          />
+        </label>
+
+        <label className="grid gap-1.5 text-sm font-medium">
+          Company name
+          <input
+            className="h-11 rounded-md border border-[#b9c3b1] bg-white px-3 text-sm text-[#17211c] outline-none transition focus:border-[#176b4d] focus:ring-2 focus:ring-[#176b4d]/20"
+            onChange={(event) => setCompanyName(event.target.value)}
+            value={companyName}
+          />
+        </label>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label className="grid gap-1.5 text-sm font-medium">
+            Role
+            <input
+              className="h-11 rounded-md border border-[#b9c3b1] bg-white px-3 text-sm text-[#17211c] outline-none transition focus:border-[#176b4d] focus:ring-2 focus:ring-[#176b4d]/20"
+              onChange={(event) => setRole(event.target.value)}
+              value={role}
+            />
+          </label>
+
+          <NumberField
+            label="Team size"
+            min="1"
+            onChange={setTeamSize}
+            value={teamSize}
+          />
+        </div>
+
+        {leadStatus === "saved" ? (
+          <p className="rounded-md bg-white p-3 text-sm font-medium text-[#176b4d]">
+            Lead saved and confirmation email requested.
+          </p>
+        ) : null}
+
+        {leadStatus === "storage-not-configured" ? (
+          <p className="rounded-md bg-white p-3 text-sm font-medium text-[#a4472a]">
+            Form works, but Supabase is not configured locally yet.
+          </p>
+        ) : null}
+
+        {leadError ? (
+          <p className="rounded-md bg-white p-3 text-sm font-medium text-[#a4472a]">
+            {leadError}
+          </p>
+        ) : null}
+
+        <button
+          className="rounded-md bg-[#17211c] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2d3a33]"
+          disabled={leadStatus === "submitting"}
+          type="submit"
+        >
+          {leadStatus === "submitting" ? "Sending..." : "Send audit"}
+        </button>
+      </form>
+    </section>
   );
 }
 
@@ -496,6 +797,19 @@ function Metric({ label, value }: { label: string; value: string }) {
 
 function getPlansForTool(toolName: ToolName) {
   return PRICING_PLANS.filter((plan) => plan.toolName === toolName);
+}
+
+function draftToAuditInput(draft: DraftState): AuditInput {
+  return {
+    tools: draft.tools.map((tool) => ({
+      toolName: tool.toolName,
+      planName: tool.planName,
+      monthlySpend: parseCurrencyInput(tool.monthlySpend),
+      seats: parseWholeNumberInput(tool.seats),
+      teamSize: parseWholeNumberInput(tool.teamSize),
+      primaryUseCase: tool.primaryUseCase,
+    })),
+  };
 }
 
 function normalizeDraft(rawDraft: unknown): DraftState {
