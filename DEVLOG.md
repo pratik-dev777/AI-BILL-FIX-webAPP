@@ -1,5 +1,15 @@
 # Devlog
 
+## 2026-05-24 - Phase 4
+
+- Added Supabase and Resend dependencies.
+- Added `.env.example` without real secrets.
+- Added Supabase schema SQL for `audit_results` and `leads`.
+- Added `/api/audits` to validate audit input, recalculate results server-side, and save audits when Supabase is configured.
+- Added `/api/leads` to capture email after results, validate a honeypot field, save lead data, and send a Resend email when configured.
+- Updated the UI so lead capture appears only after audit results.
+- Kept public share pages and AI-generated summaries out of Phase 4 for later phases.
+
 ## 2026-05-23 - Phase 3
 
 - Replaced the static preview landing page with an interactive audit workspace.
@@ -20,4 +30,4 @@
 
 ## Next
 
-- Phase 4: Supabase backend, save audit, lead capture, Resend email, and abuse protection.
+- Phase 5: AI summary fallback, public share URL, and Open Graph/Twitter metadata.

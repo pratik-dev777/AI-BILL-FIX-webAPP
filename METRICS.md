@@ -1,6 +1,6 @@
 # Metrics
 
-## Phase 3
+## Phase 4
 
 No analytics are implemented yet.
 
@@ -13,6 +13,9 @@ No analytics are implemented yet.
 - Tool row added
 - Tool row removed
 - Lead captured after results
+- Lead capture rejected by honeypot
+- Audit saved to backend
+- Transactional email sent
 - Public audit shared
 - Credex consultation CTA clicked
 

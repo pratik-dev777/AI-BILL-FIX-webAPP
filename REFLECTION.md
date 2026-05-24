@@ -1,5 +1,11 @@
 # Reflection
 
+## Phase 4
+
+The backend routes recalculate audit results on the server instead of trusting numbers sent from the browser. This matters because a user can edit client-side JavaScript, but the API should store results produced by the deterministic engine.
+
+The app now behaves honestly without secrets: local development can calculate audits, but Supabase storage and Resend email report as not configured until real environment variables are provided. The first abuse protection choice is a honeypot field because it is simple, explainable, and does not add friction for real users.
+
 ## Phase 3
 
 The main decision was to keep the first screen useful instead of adding a separate marketing page. AIBillFIX now opens directly to the audit workflow, which is better for an assessment project because the evaluator can test the core feature immediately.

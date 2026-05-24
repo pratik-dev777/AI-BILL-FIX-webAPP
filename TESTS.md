@@ -1,6 +1,6 @@
 # Tests
 
-## Phase 3 Automated Tests
+## Phase 4 Automated Tests
 
 Run:
 
@@ -30,7 +30,20 @@ The audit engine tests cover:
 - Run the audit and confirm results appear.
 - Try a high-savings stack and confirm the Credex CTA appears.
 - Try a low-savings stack and confirm the efficient-stack message appears.
+- Confirm lead capture appears only after results are shown.
+- Submit an email after results and confirm the UI handles missing local Supabase/Resend config honestly.
+- With Supabase configured, confirm an audit row and lead row are created.
+- With Resend configured, confirm the transactional email is sent.
+
+## API Smoke Checks
+
+Without real environment variables, local API routes should still respond honestly:
+
+```bash
+# /api/audits should return storageStatus: storage-not-configured
+# /api/leads should return storageStatus: storage-not-configured and emailStatus: email-not-configured
+```
 
 ## Notes
 
-Phase 3 still uses automated tests for business logic only. Browser/UI tests can be added later if time allows.
+Phase 4 still uses automated tests for business logic only. Supabase and Resend need real environment variables for full integration verification.
