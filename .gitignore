@@ -20,6 +20,7 @@ dev-server.log
 
 # env files
 .env*
+!.env.example
 
 # vercel
 .vercel
