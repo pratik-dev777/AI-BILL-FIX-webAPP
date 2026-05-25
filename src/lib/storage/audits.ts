@@ -1,5 +1,18 @@
 import type { AuditInput, AuditResult } from "@/lib/audit/types";
+import type { PersonalizedSummary } from "@/lib/ai/summary";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
+
+export type PublicAuditRecord = {
+  annualSavings: number;
+  createdAt: string;
+  currentMonthlySpend: number;
+  monthlySavings: number;
+  optimizedMonthlySpend: number;
+  publicSlug: string;
+  result: AuditResult;
+  summary: PersonalizedSummary | null;
+  tools: AuditInput["tools"];
+};
 
 export type SaveAuditOutcome =
   | {
@@ -26,6 +39,7 @@ export type SaveLeadOutcome =
 export async function saveAuditResult(
   input: AuditInput,
   result: AuditResult,
+  summary?: PersonalizedSummary,
 ): Promise<SaveAuditOutcome> {
   const supabase = getSupabaseServerClient();
 
@@ -46,7 +60,10 @@ export async function saveAuditResult(
       optimized_monthly_spend: result.optimizedMonthlySpend,
       public_slug: publicSlug,
       monthly_savings: result.monthlySavings,
-      result,
+      result: {
+        ...result,
+        personalizedSummary: summary ?? null,
+      },
       tools: input.tools,
     })
     .select("id, public_slug")
@@ -60,6 +77,44 @@ export async function saveAuditResult(
     auditId: data.id,
     publicSlug: data.public_slug,
     status: "saved",
+  };
+}
+
+export async function getPublicAuditBySlug(
+  publicSlug: string,
+): Promise<PublicAuditRecord | null> {
+  const supabase = getSupabaseServerClient();
+
+  if (!supabase) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("audit_results")
+    .select(
+      "annual_savings, created_at, current_monthly_spend, monthly_savings, optimized_monthly_spend, public_slug, result, tools",
+    )
+    .eq("public_slug", publicSlug)
+    .single();
+
+  if (error || !data) {
+    return null;
+  }
+
+  const resultWithSummary = data.result as AuditResult & {
+    personalizedSummary?: PersonalizedSummary | null;
+  };
+
+  return {
+    annualSavings: Number(data.annual_savings),
+    createdAt: String(data.created_at),
+    currentMonthlySpend: Number(data.current_monthly_spend),
+    monthlySavings: Number(data.monthly_savings),
+    optimizedMonthlySpend: Number(data.optimized_monthly_spend),
+    publicSlug: String(data.public_slug),
+    result: resultWithSummary,
+    summary: resultWithSummary.personalizedSummary ?? null,
+    tools: data.tools as AuditInput["tools"],
   };
 }
 
