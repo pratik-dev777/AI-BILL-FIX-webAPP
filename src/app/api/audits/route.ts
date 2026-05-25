@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auditAiSpend } from "@/lib/audit/engine";
 import { auditInputSchema } from "@/lib/audit/types";
+import { generatePersonalizedSummary } from "@/lib/ai/summary";
 import { getServerEnv } from "@/lib/env";
 import { saveAuditResult } from "@/lib/storage/audits";
 
@@ -9,7 +10,11 @@ export async function POST(request: Request) {
     const body = await request.json();
     const input = auditInputSchema.parse(body);
     const result = auditAiSpend(input);
-    const storage = await saveAuditResult(input, result);
+    const summary = await generatePersonalizedSummary({
+      auditInput: input,
+      auditResult: result,
+    });
+    const storage = await saveAuditResult(input, result, summary);
     const publicUrl = storage.publicSlug
       ? `${getServerEnv().appUrl}/audit/${storage.publicSlug}`
       : null;
@@ -19,6 +24,7 @@ export async function POST(request: Request) {
       publicSlug: storage.publicSlug,
       publicUrl,
       result,
+      summary,
       storageStatus: storage.status,
     });
   } catch (error) {

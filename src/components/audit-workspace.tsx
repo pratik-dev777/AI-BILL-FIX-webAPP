@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { auditAiSpend } from "@/lib/audit/engine";
 import type { AuditInput, AuditResult } from "@/lib/audit/types";
+import type { PersonalizedSummary } from "@/lib/ai/summary";
 import { PRICING_PLANS, type ToolName, type UseCase } from "@/lib/pricing";
 
 type ToolDraft = {
@@ -58,6 +59,7 @@ export function AuditWorkspace() {
   const [auditResult, setAuditResult] = useState<AuditResult | null>(null);
   const [auditInput, setAuditInput] = useState<AuditInput | null>(null);
   const [auditRecord, setAuditRecord] = useState<AuditRecord | null>(null);
+  const [summary, setSummary] = useState<PersonalizedSummary | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [hasLoadedDraft, setHasLoadedDraft] = useState(false);
   const [isSavingAudit, setIsSavingAudit] = useState(false);
@@ -101,6 +103,7 @@ export function AuditWorkspace() {
     setAuditResult(null);
     setAuditInput(null);
     setAuditRecord(null);
+    setSummary(null);
     setLeadStatus("idle");
     setLeadError(null);
     setFormError(null);
@@ -125,6 +128,7 @@ export function AuditWorkspace() {
     setAuditResult(null);
     setAuditInput(null);
     setAuditRecord(null);
+    setSummary(null);
     setLeadStatus("idle");
     setLeadError(null);
     setFormError(null);
@@ -143,6 +147,7 @@ export function AuditWorkspace() {
     setAuditResult(null);
     setAuditInput(null);
     setAuditRecord(null);
+    setSummary(null);
     setLeadStatus("idle");
     setLeadError(null);
     setFormError(null);
@@ -159,6 +164,7 @@ export function AuditWorkspace() {
     setAuditResult(null);
     setAuditInput(null);
     setAuditRecord(null);
+    setSummary(null);
     setLeadStatus("idle");
     setLeadError(null);
     setFormError(null);
@@ -174,6 +180,7 @@ export function AuditWorkspace() {
       setAuditInput(nextAuditInput);
       setAuditResult(localResult);
       setAuditRecord(null);
+      setSummary(null);
       setLeadStatus("idle");
       setLeadError(null);
       setFormError(null);
@@ -195,10 +202,12 @@ export function AuditWorkspace() {
         publicSlug: string | null;
         publicUrl: string | null;
         result: AuditResult;
+        summary: PersonalizedSummary;
         storageStatus: AuditRecord["storageStatus"];
       };
 
       setAuditResult(savedAudit.result);
+      setSummary(savedAudit.summary);
       setAuditRecord({
         auditId: savedAudit.auditId,
         publicSlug: savedAudit.publicSlug,
@@ -210,6 +219,7 @@ export function AuditWorkspace() {
         const nextAuditInput = draftToAuditInput(draft);
         setAuditInput(nextAuditInput);
         setAuditResult(auditAiSpend(nextAuditInput));
+        setSummary(null);
         setAuditRecord({
           auditId: null,
           publicSlug: null,
@@ -361,6 +371,7 @@ export function AuditWorkspace() {
         leadStatus={leadStatus}
         onLeadSubmit={submitLead}
         result={auditResult}
+        summary={summary}
       />
     </div>
   );
@@ -511,6 +522,7 @@ function ResultsPanel({
   leadStatus,
   onLeadSubmit,
   result,
+  summary,
 }: {
   auditRecord: AuditRecord | null;
   leadError: string | null;
@@ -523,6 +535,7 @@ function ResultsPanel({
     teamSize: string;
   }) => Promise<void>;
   result: AuditResult | null;
+  summary: PersonalizedSummary | null;
 }) {
   if (!result) {
     return (
@@ -569,6 +582,8 @@ function ResultsPanel({
       </section>
 
       {auditRecord ? <StorageNotice auditRecord={auditRecord} /> : null}
+
+      {summary ? <SummaryPanel summary={summary} /> : null}
 
       {result.showCredexCta ? (
         <section className="rounded-lg border border-[#ffcaa8] bg-[#fff3ed] p-4">
@@ -640,12 +655,34 @@ function ResultsPanel({
   );
 }
 
+function SummaryPanel({ summary }: { summary: PersonalizedSummary }) {
+  return (
+    <section className="rounded-lg border border-[#d8dfd2] bg-[#f8faf6] p-4">
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-base font-semibold">Personalized summary</h2>
+        <span className="rounded-md bg-white px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#64766b]">
+          {summary.source}
+        </span>
+      </div>
+      <p className="mt-3 text-sm leading-6 text-[#4b5c51]">{summary.text}</p>
+    </section>
+  );
+}
+
 function StorageNotice({ auditRecord }: { auditRecord: AuditRecord }) {
   if (auditRecord.storageStatus === "saved") {
     return (
-      <p className="rounded-lg border border-[#d8dfd2] bg-[#f8faf6] p-3 text-sm text-[#4b5c51]">
-        Audit saved. Public share URL setup continues in Phase 5.
-      </p>
+      <div className="rounded-lg border border-[#d8dfd2] bg-[#f8faf6] p-3 text-sm text-[#4b5c51]">
+        <p className="font-medium text-[#17211c]">Audit saved.</p>
+        {auditRecord.publicUrl ? (
+          <a
+            className="mt-2 inline-flex break-all font-semibold text-[#176b4d]"
+            href={auditRecord.publicUrl}
+          >
+            {auditRecord.publicUrl}
+          </a>
+        ) : null}
+      </div>
     );
   }
 
