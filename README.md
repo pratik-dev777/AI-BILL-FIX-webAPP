@@ -4,7 +4,7 @@ AIBillFIX is a free web app for auditing a startup's AI tool spending. The proje
 
 ## Current Status
 
-Phase 4 is complete:
+Phase 5 is complete:
 
 - Next.js App Router project scaffolded with TypeScript and Tailwind CSS.
 - Pricing data model added in `src/lib/pricing.ts`.
@@ -17,9 +17,12 @@ Phase 4 is complete:
 - Post-result lead capture stores email details through Supabase.
 - Resend transactional email helper sends a confirmation when configured.
 - Honeypot abuse protection is included before rate limiting.
+- Anthropic-compatible summary provider added with deterministic fallback.
+- Public audit pages added at `/audit/[slug]`.
+- Public pages include Open Graph and Twitter metadata.
 - Required root documentation files added as honest placeholders or working notes.
 
-Later phases will add AI summaries, public share pages, CI, and deployment documentation.
+Later phases will add CI, accessibility polish, deployment documentation, and final review materials.
 
 ## Tech Stack
 
@@ -30,7 +33,7 @@ Later phases will add AI summaries, public share pages, CI, and deployment docum
 - Zod
 - Supabase
 - Resend
-- Anthropic-compatible provider wrapper, planned for summaries
+- Anthropic-compatible provider wrapper
 
 ## Environment Variables
 
@@ -41,6 +44,7 @@ SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
 RESEND_API_KEY=
 RESEND_FROM_EMAIL=
+ANTHROPIC_API_KEY=
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 

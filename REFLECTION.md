@@ -1,5 +1,11 @@
 # Reflection
 
+## Phase 5
+
+The summary layer is intentionally separate from the audit engine. The engine owns numbers; the AI provider only explains them. This keeps the app easier to defend in an interview because the savings math remains deterministic and testable.
+
+The public page reads saved audit data by slug and avoids lead-identifying fields. This keeps the share URL useful without exposing email, company name, or role. When Supabase is not configured locally, the app still calculates results and fallback summaries honestly, but public URLs require real storage.
+
 ## Phase 4
 
 The backend routes recalculate audit results on the server instead of trusting numbers sent from the browser. This matters because a user can edit client-side JavaScript, but the API should store results produced by the deterministic engine.

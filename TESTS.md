@@ -1,6 +1,6 @@
 # Tests
 
-## Phase 4 Automated Tests
+## Phase 5 Automated Tests
 
 Run:
 
@@ -34,16 +34,22 @@ The audit engine tests cover:
 - Submit an email after results and confirm the UI handles missing local Supabase/Resend config honestly.
 - With Supabase configured, confirm an audit row and lead row are created.
 - With Resend configured, confirm the transactional email is sent.
+- Confirm a personalized summary appears after running an audit.
+- Without `ANTHROPIC_API_KEY`, confirm the summary source is `fallback`.
+- With Supabase configured, open the returned `/audit/[slug]` URL.
+- Confirm the public page shows tools, savings, recommendations, and summary.
+- Confirm the public page does not show email, company name, or role.
+- Inspect page source or browser dev tools to confirm Open Graph and Twitter metadata are present.
 
 ## API Smoke Checks
 
 Without real environment variables, local API routes should still respond honestly:
 
 ```bash
-# /api/audits should return storageStatus: storage-not-configured
+# /api/audits should return storageStatus: storage-not-configured and summary.source: fallback
 # /api/leads should return storageStatus: storage-not-configured and emailStatus: email-not-configured
 ```
 
 ## Notes
 
-Phase 4 still uses automated tests for business logic only. Supabase and Resend need real environment variables for full integration verification.
+Phase 5 still uses automated tests for business logic only. Supabase, Resend, and Anthropic need real environment variables for full integration verification.

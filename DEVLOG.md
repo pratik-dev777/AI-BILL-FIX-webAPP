@@ -1,5 +1,15 @@
 # Devlog
 
+## 2026-05-25 - Phase 5
+
+- Added an Anthropic-compatible summary provider in `src/lib/ai/summary.ts`.
+- Added deterministic fallback summaries for missing keys, API errors, or empty provider responses.
+- Added full summary prompt documentation in `PROMPTS.md`.
+- Updated `/api/audits` to return a personalized summary and save it with audit results.
+- Added public audit pages at `/audit/[slug]` that strip lead-identifying fields.
+- Added Open Graph and Twitter metadata for public audit URLs.
+- Updated the results UI to display the summary and saved public URL when available.
+
 ## 2026-05-24 - Phase 4
 
 - Added Supabase and Resend dependencies.
@@ -30,4 +40,4 @@
 
 ## Next
 
-- Phase 5: AI summary fallback, public share URL, and Open Graph/Twitter metadata.
+- Phase 6: documentation, CI, Lighthouse/accessibility polish, and deployment checklist.

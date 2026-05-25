@@ -1,6 +1,6 @@
 # Architecture
 
-## Phase 4 Snapshot
+## Phase 5 Snapshot
 
 AIBillFIX currently contains:
 
@@ -15,6 +15,9 @@ AIBillFIX currently contains:
 - Supabase storage helpers and schema SQL.
 - Resend transactional email helper.
 - Honeypot abuse protection for lead capture.
+- Anthropic-compatible summary provider with deterministic fallback.
+- Public audit route at `/audit/[slug]`.
+- Open Graph and Twitter metadata for public audit pages.
 - Automated tests for the audit engine.
 
 ## Current Code Structure
@@ -22,7 +25,9 @@ AIBillFIX currently contains:
 - `src/app`: app layout and homepage route.
 - `src/app/api/audits/route.ts`: validates audit input, recalculates results on the server, and saves the audit when Supabase is configured.
 - `src/app/api/leads/route.ts`: validates post-result lead capture, rejects non-empty honeypot submissions, saves the lead, and sends email when configured.
+- `src/app/audit/[slug]/page.tsx`: public stripped audit page and social metadata.
 - `src/components/audit-workspace.tsx`: form state, localStorage persistence, audit trigger, and results UI.
+- `src/lib/ai/summary.ts`: replaceable summary provider with Anthropic and fallback paths.
 - `src/lib/env.ts`: server environment variable access.
 - `src/lib/supabase/server.ts`: Supabase server client.
 - `src/lib/storage/audits.ts`: audit and lead persistence helpers.
@@ -40,14 +45,15 @@ AIBillFIX currently contains:
 4. Zod validates and normalizes input.
 5. Deterministic audit engine calculates savings.
 6. Results panel shows savings and recommendations.
-7. API route saves the audit if Supabase environment variables are configured.
-8. Lead capture appears only after results.
-9. Lead API validates the honeypot, stores lead details if Supabase is configured, and sends email if Resend is configured.
-10. Public share page and metadata arrive in Phase 5.
+7. Summary provider tries Anthropic when configured and falls back to a deterministic template.
+8. API route saves the audit and summary if Supabase environment variables are configured.
+9. Lead capture appears only after results.
+10. Lead API validates the honeypot, stores lead details if Supabase is configured, and sends email if Resend is configured.
+11. Public audit page shows tools, savings, recommendations, and summary without email/company/role data.
 
-## Phase 4 Rule
+## Phase 5 Rule
 
-The audit engine does not use AI to calculate savings. AI summaries in a later phase may explain results, but the numbers must come from deterministic code.
+The audit engine does not use AI to calculate savings. AI summaries explain deterministic results only and must not create new math.
 
 ## Abuse Protection
 
