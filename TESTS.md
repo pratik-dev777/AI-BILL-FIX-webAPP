@@ -1,6 +1,6 @@
 # Tests
 
-## Phase 5 Automated Tests
+## Phase 6 Automated Tests
 
 Run:
 
@@ -40,6 +40,9 @@ The audit engine tests cover:
 - Confirm the public page shows tools, savings, recommendations, and summary.
 - Confirm the public page does not show email, company name, or role.
 - Inspect page source or browser dev tools to confirm Open Graph and Twitter metadata are present.
+- Press `Tab` on the home page and confirm the `Skip to audit` link appears.
+- Confirm keyboard focus is visible on links, buttons, selects, and inputs.
+- Run the same keyboard skip-link check on a public audit page when Supabase is configured.
 
 ## API Smoke Checks
 
@@ -50,6 +53,28 @@ Without real environment variables, local API routes should still respond honest
 # /api/leads should return storageStatus: storage-not-configured and emailStatus: email-not-configured
 ```
 
+## CI Checks
+
+GitHub Actions runs:
+
+```bash
+npm ci
+npm run lint
+npm run test
+```
+
+on pushes and pull requests targeting `main`.
+
+## Lighthouse
+
+Lighthouse has not been run yet. Do not write Lighthouse scores until they are measured from a real local or deployed page.
+
+Recommended command after deployment:
+
+```bash
+npx lighthouse https://YOUR_DEPLOYED_URL --view
+```
+
 ## Notes
 
-Phase 5 still uses automated tests for business logic only. Supabase, Resend, and Anthropic need real environment variables for full integration verification.
+Phase 6 still uses automated tests for business logic only. Supabase, Resend, and Anthropic need real environment variables for full integration verification.

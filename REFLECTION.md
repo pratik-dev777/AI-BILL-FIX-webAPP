@@ -1,5 +1,13 @@
 # Reflection
 
+## Phase 6
+
+CI is deliberately simple: install dependencies, lint, and run tests on `main`. The assignment specifically requires lint and tests, and keeping CI focused makes failures easier to explain as a beginner.
+
+The accessibility pass focused on keyboard and screen reader basics rather than cosmetic changes. Skip links, visible focus states, live regions, and alert/status roles improve usability without changing the product flow.
+
+Lighthouse scores are not documented yet because they have not been measured. This is intentional: recording fake performance or accessibility scores would be worse than leaving a clear TODO.
+
 ## Phase 5
 
 The summary layer is intentionally separate from the audit engine. The engine owns numbers; the AI provider only explains them. This keeps the app easier to defend in an interview because the savings math remains deterministic and testable.

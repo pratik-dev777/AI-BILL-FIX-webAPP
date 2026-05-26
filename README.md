@@ -4,7 +4,7 @@ AIBillFIX is a free web app for auditing a startup's AI tool spending. The proje
 
 ## Current Status
 
-Phase 5 is complete:
+Phase 6 is complete:
 
 - Next.js App Router project scaffolded with TypeScript and Tailwind CSS.
 - Pricing data model added in `src/lib/pricing.ts`.
@@ -20,9 +20,12 @@ Phase 5 is complete:
 - Anthropic-compatible summary provider added with deterministic fallback.
 - Public audit pages added at `/audit/[slug]`.
 - Public pages include Open Graph and Twitter metadata.
+- GitHub Actions CI added for lint and tests on `main`.
+- Accessibility polish added for skip links, focus states, and live status announcements.
+- Deployment checklist added in `DEPLOYMENT.md`.
 - Required root documentation files added as honest placeholders or working notes.
 
-Later phases will add CI, accessibility polish, deployment documentation, and final review materials.
+Later phases will add final review materials, interview guide, and submission checklist.
 
 ## Tech Stack
 
@@ -67,6 +70,10 @@ npm run lint
 npm run test
 npm run build
 ```
+
+## CI
+
+`.github/workflows/ci.yml` runs `npm ci`, `npm run lint`, and `npm run test` on pushes and pull requests targeting `main`.
 
 ## Notes For Evaluators
 

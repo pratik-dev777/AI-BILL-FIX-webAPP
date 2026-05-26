@@ -1,6 +1,6 @@
 # Metrics
 
-## Phase 5
+## Phase 6
 
 No analytics are implemented yet.
 
@@ -22,6 +22,9 @@ No analytics are implemented yet.
 - Public audit viewed
 - Public audit not found
 - Credex consultation CTA clicked
+- CI run passed
+- CI run failed
+- Lighthouse audit completed
 
 ## TODO
 

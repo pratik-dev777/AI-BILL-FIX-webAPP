@@ -1,5 +1,15 @@
 # Devlog
 
+## 2026-05-26 - Phase 6
+
+- Added GitHub Actions CI in `.github/workflows/ci.yml`.
+- CI runs `npm ci`, `npm run lint`, and `npm run test` for pushes and pull requests targeting `main`.
+- Added keyboard skip links on the home page and public audit page.
+- Added global focus-visible styling for keyboard navigation.
+- Added ARIA labels, live regions, alert roles, and status roles around dynamic audit and lead-capture UI.
+- Added `DEPLOYMENT.md` with Vercel, Supabase, Resend, Anthropic, and post-deploy checks.
+- Documented that Lighthouse scores must not be written until actually measured.
+
 ## 2026-05-25 - Phase 5
 
 - Added an Anthropic-compatible summary provider in `src/lib/ai/summary.ts`.
@@ -40,4 +50,4 @@
 
 ## Next
 
-- Phase 6: documentation, CI, Lighthouse/accessibility polish, and deployment checklist.
+- Phase 7: final review, interview explanation guide, and submission checklist.

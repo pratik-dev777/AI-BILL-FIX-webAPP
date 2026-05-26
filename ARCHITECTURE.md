@@ -1,6 +1,6 @@
 # Architecture
 
-## Phase 5 Snapshot
+## Phase 6 Snapshot
 
 AIBillFIX currently contains:
 
@@ -18,6 +18,8 @@ AIBillFIX currently contains:
 - Anthropic-compatible summary provider with deterministic fallback.
 - Public audit route at `/audit/[slug]`.
 - Open Graph and Twitter metadata for public audit pages.
+- GitHub Actions CI for lint and tests.
+- Accessibility improvements for keyboard navigation and dynamic status updates.
 - Automated tests for the audit engine.
 
 ## Current Code Structure
@@ -36,6 +38,8 @@ AIBillFIX currently contains:
 - `src/lib/audit/types.ts`: Zod schemas and TypeScript types for audit input/output.
 - `src/lib/audit/engine.ts`: deterministic savings rules.
 - `src/lib/audit/engine.test.ts`: Vitest tests for the audit engine.
+- `.github/workflows/ci.yml`: CI workflow that runs lint and tests on `main`.
+- `DEPLOYMENT.md`: Vercel, Supabase, Resend, Anthropic, and post-deploy checklist.
 
 ## Planned Data Flow
 
@@ -51,9 +55,16 @@ AIBillFIX currently contains:
 10. Lead API validates the honeypot, stores lead details if Supabase is configured, and sends email if Resend is configured.
 11. Public audit page shows tools, savings, recommendations, and summary without email/company/role data.
 
-## Phase 5 Rule
+## Phase 6 Rule
 
 The audit engine does not use AI to calculate savings. AI summaries explain deterministic results only and must not create new math.
+
+## Accessibility Notes
+
+- Home and public audit pages include skip links for keyboard users.
+- Global focus-visible styles make keyboard focus visible.
+- Audit results use live regions so screen readers are notified when results update.
+- Error messages use alert roles, and successful lead states use status roles.
 
 ## Abuse Protection
 
