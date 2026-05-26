@@ -286,7 +286,10 @@ export function AuditWorkspace() {
   }
 
   return (
-    <div className="grid flex-1 gap-6 py-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(360px,0.75fr)]">
+    <div
+      className="grid flex-1 gap-6 py-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(360px,0.75fr)]"
+      id="audit-workspace"
+    >
       <section className="space-y-6">
         <div className="max-w-3xl">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#a4472a]">
@@ -341,7 +344,10 @@ export function AuditWorkspace() {
           </div>
 
           {formError ? (
-            <p className="mt-4 rounded-md bg-[#fff3ed] p-3 text-sm font-medium text-[#a4472a]">
+            <p
+              className="mt-4 rounded-md bg-[#fff3ed] p-3 text-sm font-medium text-[#a4472a]"
+              role="alert"
+            >
               {formError}
             </p>
           ) : null}
@@ -355,6 +361,7 @@ export function AuditWorkspace() {
             </p>
             <button
               className="rounded-md bg-[#176b4d] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#12563d]"
+              aria-busy={isSavingAudit}
               disabled={isSavingAudit}
               onClick={runAudit}
               type="button"
@@ -539,7 +546,10 @@ function ResultsPanel({
 }) {
   if (!result) {
     return (
-      <aside className="rounded-lg border border-[#d8dfd2] bg-white p-5 shadow-[0_18px_55px_rgba(23,33,28,0.08)]">
+      <aside
+        aria-label="Audit results"
+        className="rounded-lg border border-[#d8dfd2] bg-white p-5 shadow-[0_18px_55px_rgba(23,33,28,0.08)]"
+      >
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#a4472a]">
           Audit results
         </p>
@@ -555,7 +565,11 @@ function ResultsPanel({
   }
 
   return (
-    <aside className="space-y-4 rounded-lg border border-[#d8dfd2] bg-white p-5 shadow-[0_18px_55px_rgba(23,33,28,0.08)]">
+    <aside
+      aria-label="Audit results"
+      aria-live="polite"
+      className="space-y-4 rounded-lg border border-[#d8dfd2] bg-white p-5 shadow-[0_18px_55px_rgba(23,33,28,0.08)]"
+    >
       <section className="rounded-lg bg-[#17211c] p-5 text-white">
         <p className="text-sm font-medium text-[#c8d4ca]">
           Estimated monthly savings
@@ -792,25 +806,35 @@ function LeadCaptureForm({
         </div>
 
         {leadStatus === "saved" ? (
-          <p className="rounded-md bg-white p-3 text-sm font-medium text-[#176b4d]">
+          <p
+            className="rounded-md bg-white p-3 text-sm font-medium text-[#176b4d]"
+            role="status"
+          >
             Lead saved and confirmation email requested.
           </p>
         ) : null}
 
         {leadStatus === "storage-not-configured" ? (
-          <p className="rounded-md bg-white p-3 text-sm font-medium text-[#a4472a]">
+          <p
+            className="rounded-md bg-white p-3 text-sm font-medium text-[#a4472a]"
+            role="status"
+          >
             Form works, but Supabase is not configured locally yet.
           </p>
         ) : null}
 
         {leadError ? (
-          <p className="rounded-md bg-white p-3 text-sm font-medium text-[#a4472a]">
+          <p
+            className="rounded-md bg-white p-3 text-sm font-medium text-[#a4472a]"
+            role="alert"
+          >
             {leadError}
           </p>
         ) : null}
 
         <button
           className="rounded-md bg-[#17211c] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2d3a33]"
+          aria-busy={leadStatus === "submitting"}
           disabled={leadStatus === "submitting"}
           type="submit"
         >

@@ -52,6 +52,9 @@ export default async function PublicAuditPage({ params }: PublicAuditPageProps) 
 
   return (
     <main className="min-h-screen bg-[#f8faf6] text-[#17211c]">
+      <a className="skip-link" href="#public-audit">
+        Skip to audit
+      </a>
       <section className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-5 sm:px-6 lg:px-8">
         <header className="flex items-center justify-between border-b border-[#d8dfd2] pb-5">
           <Link className="text-lg font-semibold tracking-tight" href="/">
@@ -65,7 +68,7 @@ export default async function PublicAuditPage({ params }: PublicAuditPageProps) 
           </Link>
         </header>
 
-        <section className="py-10">
+        <section className="py-10" id="public-audit">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#a4472a]">
             Public AI spend audit
           </p>

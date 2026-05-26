@@ -25,3 +25,26 @@ body {
 a {
   text-decoration: none;
 }
+
+:focus-visible {
+  outline: 3px solid #176b4d;
+  outline-offset: 3px;
+}
+
+.skip-link {
+  background: #17211c;
+  border-radius: 6px;
+  color: #ffffff;
+  font-weight: 700;
+  left: 16px;
+  padding: 10px 14px;
+  position: absolute;
+  top: 12px;
+  transform: translateY(-150%);
+  transition: transform 150ms ease;
+  z-index: 50;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
