@@ -1,5 +1,11 @@
 # Reflection
 
+## Phase 7
+
+The final phase is about making the work explainable. The interview guide turns implementation details into a story: deterministic audit math first, AI summary second, backend recalculation for trust, and public sharing without lead-identifying fields.
+
+The submission checklist is intentionally practical. It separates what is complete locally from what still needs real production configuration, such as Supabase, Resend, Anthropic, deployment, and Lighthouse scoring.
+
 ## Phase 6
 
 CI is deliberately simple: install dependencies, lint, and run tests on `main`. The assignment specifically requires lint and tests, and keeping CI focused makes failures easier to explain as a beginner.

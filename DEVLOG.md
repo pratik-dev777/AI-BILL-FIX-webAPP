@@ -1,5 +1,13 @@
 # Devlog
 
+## 2026-05-26 - Phase 7
+
+- Added `INTERVIEW_GUIDE.md` with a one-minute explanation, key files, demo script, tradeoffs, and likely interview questions.
+- Added `SUBMISSION_CHECKLIST.md` covering repository state, required docs, local verification, deployment, honesty checks, and final submission.
+- Updated README, architecture, reflection, tests, and metrics for final review.
+- Ran final local verification commands.
+- Kept deployment, real integration checks, and Lighthouse scores documented as honest follow-up steps unless actually completed.
+
 ## 2026-05-26 - Phase 6
 
 - Added GitHub Actions CI in `.github/workflows/ci.yml`.
@@ -50,4 +58,4 @@
 
 ## Next
 
-- Phase 7: final review, interview explanation guide, and submission checklist.
+- Final submission: push remaining commits, confirm CI, deploy if required, and use `SUBMISSION_CHECKLIST.md`.

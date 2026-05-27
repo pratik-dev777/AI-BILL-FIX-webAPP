@@ -1,6 +1,6 @@
 # Architecture
 
-## Phase 6 Snapshot
+## Phase 7 Snapshot
 
 AIBillFIX currently contains:
 
@@ -20,6 +20,7 @@ AIBillFIX currently contains:
 - Open Graph and Twitter metadata for public audit pages.
 - GitHub Actions CI for lint and tests.
 - Accessibility improvements for keyboard navigation and dynamic status updates.
+- Interview guide and submission checklist.
 - Automated tests for the audit engine.
 
 ## Current Code Structure
@@ -40,6 +41,8 @@ AIBillFIX currently contains:
 - `src/lib/audit/engine.test.ts`: Vitest tests for the audit engine.
 - `.github/workflows/ci.yml`: CI workflow that runs lint and tests on `main`.
 - `DEPLOYMENT.md`: Vercel, Supabase, Resend, Anthropic, and post-deploy checklist.
+- `INTERVIEW_GUIDE.md`: beginner-friendly explanation guide for interview prep.
+- `SUBMISSION_CHECKLIST.md`: final checklist for repo, docs, deployment, and honesty checks.
 
 ## Planned Data Flow
 
@@ -55,7 +58,7 @@ AIBillFIX currently contains:
 10. Lead API validates the honeypot, stores lead details if Supabase is configured, and sends email if Resend is configured.
 11. Public audit page shows tools, savings, recommendations, and summary without email/company/role data.
 
-## Phase 6 Rule
+## Phase 7 Rule
 
 The audit engine does not use AI to calculate savings. AI summaries explain deterministic results only and must not create new math.
 

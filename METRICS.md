@@ -1,6 +1,6 @@
 # Metrics
 
-## Phase 6
+## Phase 7
 
 No analytics are implemented yet.
 
@@ -25,6 +25,8 @@ No analytics are implemented yet.
 - CI run passed
 - CI run failed
 - Lighthouse audit completed
+- Submission checklist completed
+- Interview demo rehearsed
 
 ## TODO
 

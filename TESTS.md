@@ -1,6 +1,6 @@
 # Tests
 
-## Phase 6 Automated Tests
+## Phase 7 Automated Tests
 
 Run:
 
@@ -43,6 +43,8 @@ The audit engine tests cover:
 - Press `Tab` on the home page and confirm the `Skip to audit` link appears.
 - Confirm keyboard focus is visible on links, buttons, selects, and inputs.
 - Run the same keyboard skip-link check on a public audit page when Supabase is configured.
+- Review `INTERVIEW_GUIDE.md` and rehearse the demo script.
+- Review `SUBMISSION_CHECKLIST.md` before submitting the repository.
 
 ## API Smoke Checks
 
@@ -77,4 +79,4 @@ npx lighthouse https://YOUR_DEPLOYED_URL --view
 
 ## Notes
 
-Phase 6 still uses automated tests for business logic only. Supabase, Resend, and Anthropic need real environment variables for full integration verification.
+Phase 7 still uses automated tests for business logic only. Supabase, Resend, and Anthropic need real environment variables for full integration verification.
